@@ -1,0 +1,634 @@
+<title>SBMP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --ink:#0A0A0A;
+  --ink-2:#111010;
+  --surface:#161513;
+  --raise:#1D1B17;
+  --line:#2A2721;
+  --line-soft:#221F1A;
+  --text:#F0ECE2;
+  --muted:#A8A091;
+  --dim:#736C5F;
+  --gold:#D9A93A;
+  --gold-2:#F0C766;
+  --gold-soft:#D9A93A1A;
+  --wa:#25D366;
+  --display:"Sora","Segoe UI",system-ui,sans-serif;
+  --body:"Poppins","Segoe UI",system-ui,sans-serif;
+  --gut:clamp(20px,5vw,64px);
+  --max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--body);font-weight:300;font-size:16px;line-height:1.7;padding:0;margin:0;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--display);font-weight:700;line-height:1.12;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+.wrap{max-width:var(--max);margin:0 auto;padding-inline:var(--gut)}
+.gold{color:var(--gold)}
+
+/* ---------- NAV (fixa, persiste) ---------- */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,10,10,.72);backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .3s,background .3s;
+  padding-top:env(safe-area-inset-top,0px)}
+header.nav.scrolled{border-bottom-color:var(--line);background:rgba(10,10,10,.9)}
+.nav-in{max-width:var(--max);margin:0 auto;padding:14px var(--gut);display:flex;align-items:center;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;cursor:pointer;flex-shrink:0}
+.brand img{height:38px;width:auto}
+.nav-links{display:flex;gap:4px;margin-left:auto;align-items:center}
+.nav-links button{font-family:var(--display);font-weight:500;font-size:13.5px;letter-spacing:.02em;
+  color:var(--muted);background:none;border:0;cursor:pointer;padding:8px 13px;border-radius:7px;
+  transition:color .2s,background .2s;text-transform:uppercase}
+.nav-links button:hover{color:var(--text)}
+.nav-links button.active{color:var(--gold)}
+.nav-cta{font-family:var(--display);font-weight:600!important;font-size:13px!important;
+  background:var(--gold)!important;color:#1A1405!important;padding:9px 18px!important;
+  margin-left:8px;border-radius:8px!important}
+.nav-cta:hover{background:var(--gold-2)!important;color:#1A1405!important}
+.burger{display:none;margin-left:auto;background:none;border:0;color:var(--text);cursor:pointer;padding:6px}
+.burger svg{width:26px;height:26px}
+
+/* ---------- PÁGINAS ---------- */
+.page{display:none;animation:fade .4s ease}
+.page.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+main{padding-top:68px}
+section{padding-block:clamp(56px,9vw,104px)}
+.section-head{display:grid;gap:14px;margin-bottom:44px;max-width:720px}
+.section-head h2{font-size:clamp(28px,4.6vw,42px);letter-spacing:-.015em}
+.section-head p{color:var(--muted)}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:clamp(560px,82vh,760px);display:flex;align-items:center;
+  border-bottom:1px solid var(--line-soft);overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg::before{content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(120% 90% at 78% 30%, #3a2f14 0%, transparent 55%),
+    radial-gradient(90% 80% at 18% 80%, #241d10 0%, transparent 60%),
+    linear-gradient(180deg,#0A0A0A 0%, #100E0A 100%)}
+.hero-glow{position:absolute;width:520px;height:520px;right:-60px;top:8%;border-radius:50%;
+  background:radial-gradient(circle, #D9A93A22 0%, transparent 70%);filter:blur(30px)}
+.hero-in{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding-inline:var(--gut);width:100%}
+.hero-in .eyebrow{opacity:0;animation:rise .7s .05s forwards}
+.hero h1{font-size:clamp(38px,7vw,78px);font-weight:800;letter-spacing:-.03em;margin:20px 0 0;
+  line-height:1.02;opacity:0;animation:rise .7s .15s forwards}
+.hero h1 span{display:block;color:var(--gold)}
+.hero .lede{margin-top:26px;max-width:52ch;font-size:clamp(16px,2vw,19px);color:var(--muted);
+  opacity:0;animation:rise .7s .3s forwards}
+.hero-actions{margin-top:38px;display:flex;flex-wrap:wrap;gap:14px;opacity:0;animation:rise .7s .45s forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.hero-actions{transform:translateY(14px)}
+.hero h1,.hero .lede,.hero-in .eyebrow{transform:translateY(14px)}
+
+.btn{font-family:var(--display);font-weight:600;font-size:15px;padding:15px 30px;border-radius:10px;
+  cursor:pointer;border:1px solid transparent;transition:transform .15s,background .2s,border-color .2s;
+  display:inline-flex;align-items:center;gap:9px}
+.btn:hover{transform:translateY(-2px)}
+.btn-gold{background:var(--gold);color:#1A1405}
+.btn-gold:hover{background:var(--gold-2)}
+.btn-ghost{background:transparent;color:var(--text);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ---------- PILARES ---------- */
+.pillars{background:var(--ink-2);border-bottom:1px solid var(--line-soft)}
+.pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.pillar{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px;
+  display:grid;gap:14px;align-content:start;transition:border-color .25s,transform .25s}
+.pillar:hover{border-color:var(--gold);transform:translateY(-3px)}
+.pillar .num{font-family:var(--display);font-weight:800;font-size:15px;color:var(--gold);
+  width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--gold);border-radius:11px}
+.pillar h3{font-size:17px;font-weight:600}
+.pillar p{font-size:14.5px;color:var(--muted);line-height:1.6}
+
+/* ---------- QUEM SOMOS ---------- */
+.about{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.about .body p{color:var(--muted);margin-bottom:16px}
+.about .body strong{color:var(--text);font-weight:500}
+.about-card{background:linear-gradient(160deg,var(--raise),var(--surface));
+  border:1px solid var(--line);border-radius:18px;padding:34px;display:grid;gap:20px}
+.stat{display:grid;gap:2px}
+.stat .n{font-family:var(--display);font-weight:800;font-size:34px;color:var(--gold);
+  font-variant-numeric:tabular-nums}
+.stat .l{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.stat + .stat{border-top:1px solid var(--line);padding-top:18px}
+
+/* ---------- BENEFÍCIOS / ANUIDADE ---------- */
+.join{background:var(--ink-2);border-block:1px solid var(--line-soft)}
+.join-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:start}
+.benes{display:grid;gap:12px}
+.bene{display:flex;gap:14px;align-items:flex-start;padding:15px 18px;background:var(--surface);
+  border:1px solid var(--line);border-radius:11px}
+.bene .ic{color:var(--gold);flex-shrink:0;margin-top:2px}
+.bene .ic svg{width:20px;height:20px}
+.bene p{font-size:14.5px}
+.price-card{background:linear-gradient(165deg,#211C11,#161513);border:1px solid var(--gold);
+  border-radius:18px;padding:32px;position:sticky;top:90px;display:grid;gap:8px;text-align:center}
+.price-card .tag{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.price-card .val{font-family:var(--display);font-weight:800;font-size:46px;line-height:1;margin:6px 0}
+.price-card .val small{font-size:17px;color:var(--muted);font-weight:500}
+.price-card .cond{font-size:13.5px;color:var(--muted)}
+.price-card .btn{width:100%;justify-content:center;margin-top:14px}
+.price-card .disc{font-size:12.5px;color:var(--gold);background:var(--gold-soft);
+  border-radius:8px;padding:8px 12px;margin-top:4px}
+
+/* ---------- DIRETORIA ---------- */
+.dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.dir-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  transition:border-color .25s,transform .25s}
+.dir-card:hover{border-color:var(--gold);transform:translateY(-3px)}
+.dir-photo{aspect-ratio:1;background:linear-gradient(160deg,#26221A,#161513);display:grid;place-items:center;
+  position:relative}
+.dir-photo .mono{font-family:var(--display);font-weight:800;font-size:40px;color:var(--gold);opacity:.55}
+.dir-body{padding:18px;display:grid;gap:9px}
+.dir-body .role{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.dir-body h3{font-size:16px;font-weight:600}
+.dir-body .bio{font-size:13px;color:var(--muted);line-height:1.55}
+.dir-links{display:flex;gap:8px;margin-top:2px}
+.dir-links a{width:32px;height:32px;border:1px solid var(--line);border-radius:8px;display:grid;
+  place-items:center;color:var(--muted);transition:.2s}
+.dir-links a:hover{border-color:var(--gold);color:var(--gold)}
+.dir-links svg{width:15px;height:15px}
+.dir-councils{margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.council{background:var(--ink-2);border:1px solid var(--line);border-radius:13px;padding:24px}
+.council h4{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.council ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.council li{font-size:14px;color:var(--muted)}
+
+/* ---------- ASSOCIADOS ---------- */
+.assoc-tools{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;align-items:center}
+.field{position:relative;flex:1;min-width:220px}
+.field svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--dim)}
+.field input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:13px 14px 13px 42px;color:var(--text);font-family:var(--body);font-size:14.5px}
+.field input:focus{outline:none;border-color:var(--gold)}
+select.filter{background:var(--surface);border:1px solid var(--line);border-radius:10px;color:var(--text);
+  padding:13px 16px;font-family:var(--body);font-size:14.5px;cursor:pointer;min-width:150px}
+select.filter:focus{outline:none;border-color:var(--gold)}
+.assoc-count{font-size:13.5px;color:var(--dim);margin-bottom:14px}
+.assoc-count b{color:var(--gold);font-weight:600}
+.assoc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.assoc-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+  display:flex;gap:14px;align-items:center;transition:border-color .2s}
+.assoc-card:hover{border-color:var(--line);background:var(--raise)}
+.avatar{width:46px;height:46px;border-radius:11px;background:linear-gradient(150deg,#2A2419,#191712);
+  display:grid;place-items:center;font-family:var(--display);font-weight:700;color:var(--gold);
+  font-size:16px;flex-shrink:0}
+.assoc-info{display:grid;gap:2px;min-width:0}
+.assoc-info .nm{font-family:var(--display);font-weight:600;font-size:15px}
+.assoc-info .sp{font-size:13px;color:var(--muted)}
+.assoc-info .uf{font-size:12px;color:var(--dim)}
+.badge-active{margin-left:auto;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:#8FCf8E;background:#8FCf8E18;border-radius:99px;padding:4px 9px;flex-shrink:0}
+.note{margin-top:22px;font-size:13px;color:var(--dim);border-top:1px dashed var(--line);padding-top:16px}
+.note b{color:var(--gold);font-weight:500}
+
+/* ---------- ARTIGOS ---------- */
+.art-list{display:grid;gap:12px}
+.art{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:22px 24px;
+  display:grid;gap:8px;transition:border-color .2s}
+.art:hover{border-color:var(--gold)}
+.art .meta{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;color:var(--dim)}
+.art .meta .jr{color:var(--gold)}
+.art h3{font-size:17px;font-weight:600;line-height:1.3}
+.art .auth{font-size:13.5px;color:var(--muted)}
+.jpm{margin-top:30px;background:linear-gradient(160deg,var(--raise),var(--surface));
+  border:1px solid var(--line);border-radius:16px;padding:30px;display:grid;gap:12px}
+.jpm h3{font-size:19px}
+.jpm p{color:var(--muted);font-size:14.5px;max-width:60ch}
+
+/* ---------- IMPRENSA ---------- */
+.tabs{display:flex;gap:8px;margin-bottom:28px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabs button{font-family:var(--display);font-weight:500;font-size:14px;color:var(--muted);background:none;
+  border:0;border-bottom:2px solid transparent;padding:12px 6px;margin-bottom:-1px;cursor:pointer;transition:.2s}
+.tabs button.on{color:var(--gold);border-bottom-color:var(--gold)}
+.tabpane{display:none}
+.tabpane.on{display:block;animation:fade .35s}
+.pos-list{display:grid;gap:10px}
+.pos{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;padding:18px 22px;transition:border-color .2s}
+.pos:hover{border-color:var(--gold)}
+.pos .date{font-family:var(--display);font-size:12.5px;color:var(--gold);min-width:120px;flex-shrink:0}
+.pos .ti{font-size:14.5px;flex:1}
+.pos .arrow{color:var(--dim)}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.media{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:22px;display:grid;gap:10px}
+.media .veic{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.media h3{font-size:15.5px;font-weight:600;line-height:1.35}
+.media .dt{font-size:12.5px;color:var(--dim)}
+.ig-embed{display:grid;place-items:center;text-align:center;gap:16px;padding:56px 24px;
+  background:var(--ink-2);border:1px dashed var(--line);border-radius:16px;color:var(--muted)}
+.ig-embed svg{width:44px;height:44px;color:var(--gold)}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--ink-2);border-top:1px solid var(--line);padding-block:52px 30px;margin-top:20px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.foot-brand img{height:44px;margin-bottom:16px}
+.foot-brand p{font-size:13.5px;color:var(--muted);max-width:38ch;line-height:1.6}
+.foot-col h4{font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px}
+.foot-col a,.foot-col p{display:block;font-size:14px;color:var(--muted);margin-bottom:9px;cursor:pointer}
+.foot-col a:hover{color:var(--gold)}
+.foot-bottom{max-width:var(--max);margin:36px auto 0;padding:20px var(--gut) 0;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;font-size:12.5px;color:var(--dim)}
+
+/* ---------- MOBILE ---------- */
+#mobnav{position:fixed;inset:0;z-index:99;background:rgba(10,10,10,.97);backdrop-filter:blur(10px);
+  display:none;flex-direction:column;padding:90px var(--gut) 40px;gap:6px}
+#mobnav.on{display:flex}
+#mobnav button{font-family:var(--display);font-weight:500;font-size:20px;color:var(--text);background:none;
+  border:0;border-bottom:1px solid var(--line);padding:18px 0;text-align:left;cursor:pointer}
+#mobnav button.active{color:var(--gold)}
+
+@media (max-width:860px){
+  .nav-links{display:none}
+  .burger{display:block}
+  .about{grid-template-columns:1fr;gap:32px}
+  .join-grid{grid-template-columns:1fr;gap:28px}
+  .price-card{position:static}
+  .foot-grid{grid-template-columns:1fr;gap:32px}
+}
+</style>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <div class="brand" onclick="go('inicio')"><img src="logo.png" alt="SBMP"></div>
+    <nav class="nav-links" id="desknav">
+      <button data-p="inicio" class="active">Início</button>
+      <button onclick="quem()">Quem somos</button>
+      <button data-p="diretoria">Diretoria</button>
+      <button data-p="associados">Associados</button>
+      <button data-p="artigos">Artigos</button>
+      <button data-p="imprensa">Imprensa</button>
+      <button class="nav-cta" onclick="assoc()">Associe-se</button>
+    </nav>
+    <button class="burger" onclick="toggleMob()" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div id="mobnav">
+  <button data-p="inicio" class="active">Início</button>
+  <button onclick="quem()">Quem somos</button>
+  <button data-p="diretoria">Diretoria</button>
+  <button data-p="associados">Associados</button>
+  <button data-p="artigos">Artigos</button>
+  <button data-p="imprensa">Imprensa</button>
+  <button style="color:var(--gold)" onclick="assoc()">Associe-se →</button>
+</div>
+
+<main>
+
+<!-- ===== INÍCIO ===== -->
+<div class="page on" id="p-inicio">
+  <section class="hero">
+    <div class="hero-bg"><div class="hero-glow"></div></div>
+    <div class="hero-in">
+      <span class="eyebrow">Sociedade Brasileira de Medicina Personalizada</span>
+      <h1>A medicina personalizada <span>começa em você.</span></h1>
+      <p class="lede">Uma associação médica científica de âmbito nacional, que reúne médicos e profissionais da saúde comprometidos com o cuidado individualizado ao paciente e a prevenção de doenças crônicas.</p>
+      <div class="hero-actions">
+        <button class="btn btn-gold" onclick="assoc()">Candidate-se a membro</button>
+        <button class="btn btn-ghost" onclick="go('diretoria')">Conheça a diretoria</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="pillars">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Nossos pilares</span>
+        <h2>O que sustenta a sociedade</h2>
+      </div>
+      <div class="pillar-grid">
+        <div class="pillar"><span class="num">01</span><h3>Educação e formação</h3><p>Fomentar a participação em congressos e cursos, usando toda a base de membros dedicados a melhorar a qualidade da prática médica personalizada.</p></div>
+        <div class="pillar"><span class="num">02</span><h3>Disseminação científica</h3><p>Organização de congressos e cursos e publicação de matérias em sites, revistas e livros sobre a importância do tratamento individualizado.</p></div>
+        <div class="pillar"><span class="num">03</span><h3>Cooperação</h3><p>Cooperar com instituições educacionais e sociedades médicas, reunindo a sabedoria de especialistas de uma ampla gama de áreas.</p></div>
+        <div class="pillar"><span class="num">04</span><h3>Pesquisa e inovação</h3><p>Aconselhar para o avanço da inovação da medicina personalizada e fomentar a pesquisa científica no setor de saúde.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sec-quem" style="scroll-margin-top:90px">
+    <div class="wrap about">
+      <div class="body">
+        <span class="eyebrow">Quem somos</span>
+        <h2 style="font-size:clamp(26px,4vw,38px);margin:14px 0 22px">Ciência e prática clínica, lado a lado</h2>
+        <p>A <strong>Sociedade Brasileira de Medicina Personalizada (SBMP)</strong> é uma associação médica científica de âmbito nacional — não se tratando de uma especialidade médica —, pessoa jurídica privada, <strong>sem fins lucrativos</strong>, com sede na cidade do Rio de Janeiro/RJ.</p>
+        <p>É composta por médicos de diversas especialidades e demais profissionais da saúde que acreditam no cuidado individualizado ao paciente e no tratamento preventivo de doenças e condições crônicas.</p>
+      </div>
+      <div class="about-card">
+        <div class="stat"><span class="n">Nacional</span><span class="l">Âmbito de atuação</span></div>
+        <div class="stat"><span class="n">Multidisciplinar</span><span class="l">Médicos e profissionais da saúde</span></div>
+        <div class="stat"><span class="n">Sem fins lucrativos</span><span class="l">Associação científica</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="join">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Candidate-se a membro</span>
+        <h2>Faça parte da SBMP</h2>
+      </div>
+      <div class="join-grid">
+        <div class="benes">
+          <div class="bene"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span><p>Desconto em todo curso com a chancela da SBMP</p></div>
+          <div class="bene"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span><p>Desconto em eventos e congressos da sociedade</p></div>
+          <div class="bene"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span><p>Participação no grupo de WhatsApp exclusivo dos membros</p></div>
+          <div class="bene"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span><p>Oportunidade de integrar os departamentos científicos da SBMP</p></div>
+          <div class="bene"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span><p>Consultoria jurídica para o associado</p></div>
+          <div class="bene"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></span><p>15% de desconto em submissões aprovadas pelo Journal of Personalized Medicine (JPM)</p></div>
+        </div>
+        <div class="price-card">
+          <span class="tag">Anuidade 2026</span>
+          <div class="val">R$ 497<small>,00 / ano</small></div>
+          <p class="cond">Cartão de crédito em até 3x</p>
+          <div class="disc">20% de desconto para quem se associa até 30 de maio</div>
+          <button class="btn btn-gold" onclick="assoc()">Quero me candidatar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== DIRETORIA ===== -->
+<div class="page" id="p-diretoria">
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Liderança com credibilidade</span>
+        <h2>Diretoria Executiva</h2>
+        <p>Conheça as pessoas à frente da Sociedade Brasileira de Medicina Personalizada.</p>
+      </div>
+      <div class="dir-grid" id="dirGrid"></div>
+
+      <div class="dir-councils">
+        <div class="council"><h4>Conselho Deliberativo</h4><ul>
+          <li>Ricardo Mendes Pereira</li><li>Duarte Miguel</li><li>Consuelo Callizo Genes</li>
+          <li>Antonio Pacileo</li><li>Eliane Chaves</li><li>Elvídio dos Santos</li>
+          <li>Francisco Mota Tostes</li><li>Luiz Carlos Calmon Teixeira</li></ul></div>
+        <div class="council"><h4>Conselho Fiscal</h4><ul>
+          <li>Thales Medeiros</li><li>Patrícia Silvia Hernandes</li><li>Higor Caldato</li></ul></div>
+        <div class="council"><h4>Comissão Científica</h4><ul>
+          <li>Walter Pace</li><li>Guilherme Renke</li><li>Paulo Palma</li><li>Caio Parente</li>
+          <li>André Vinícius</li><li>Juliana Paola</li><li>Marcos Galasso</li><li>Sang Choon Cha</li></ul></div>
+        <div class="council"><h4>Comissão de Comunicação</h4><ul>
+          <li>Juliana Paola de Melhado e Lima</li><li>Loreta Canivilo</li><li>Higor Michel Moreira Caldato</li>
+          <li>Malcolm Montgomery</li><li>Igor Padovesi</li><li>Jacqueline Lunardelli</li></ul></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== ASSOCIADOS ===== -->
+<div class="page" id="p-associados">
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Nosso time</span>
+        <h2>Associados</h2>
+        <p>Profissionais referência, chancelados pela SBMP. A lista reflete a base ativa de associados.</p>
+      </div>
+      <div class="assoc-tools">
+        <div class="field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="assocSearch" type="text" placeholder="Buscar por nome..." oninput="renderAssoc()">
+        </div>
+        <select class="filter" id="fEsp" onchange="renderAssoc()"><option value="">Todas as especialidades</option></select>
+        <select class="filter" id="fUf" onchange="renderAssoc()"><option value="">Todos os estados</option></select>
+      </div>
+      <div class="assoc-count" id="assocCount"></div>
+      <div class="assoc-grid" id="assocGrid"></div>
+      <p class="note"><b>Dados de exemplo.</b> Na versão final, esta lista é gerada automaticamente a partir da base unificada de associados — apenas quem está com a associação ativa, exibindo somente nome, especialidade e estado. CPF, e-mail e telefone nunca aparecem no site.</p>
+    </div>
+  </section>
+</div>
+
+<!-- ===== ARTIGOS ===== -->
+<div class="page" id="p-artigos">
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Produção científica</span>
+        <h2>Artigos científicos</h2>
+        <p>Publicações dos associados da Sociedade Brasileira de Medicina Personalizada.</p>
+      </div>
+      <div class="art-list" id="artList"></div>
+      <div class="jpm">
+        <span class="eyebrow">Parceria</span>
+        <h3>Journal of Personalized Medicine (JPM)</h3>
+        <p>A SBMP orgulha-se da parceria para publicação de diretrizes e consensos no JPM, revista internacional indexada, revisada por pares e de acesso aberto, publicada mensalmente pela MDPI. Membros da SBMP têm <strong style="color:var(--gold);font-weight:500">15% de desconto</strong> nas taxas de publicação de submissões aprovadas.</p>
+        <div><button class="btn btn-ghost" onclick="window.open('https://www.mdpi.com/journal/jpm','_blank')">Quero saber mais</button></div>
+      </div>
+      <p class="note"><b>Dados de exemplo.</b> Os artigos serão cadastrados por vocês numa planilha simples (título, autores, revista, ano e link) e aparecem aqui automaticamente.</p>
+    </div>
+  </section>
+</div>
+
+<!-- ===== IMPRENSA ===== -->
+<div class="page" id="p-imprensa">
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">SBMP na imprensa</span>
+        <h2>Imprensa</h2>
+        <p>Posicionamentos oficiais, presença na mídia e novidades da sociedade.</p>
+      </div>
+      <div class="tabs">
+        <button class="on" data-tab="pos">Posicionamentos</button>
+        <button data-tab="mid">Na mídia</button>
+        <button data-tab="ig">Instagram</button>
+      </div>
+      <div class="tabpane on" id="tab-pos"><div class="pos-list" id="posList"></div></div>
+      <div class="tabpane" id="tab-mid">
+        <div class="media-grid" id="midGrid"></div>
+        <p class="note"><b>Dados de exemplo.</b> Matérias e entrevistas são cadastradas por vocês (veículo, título, data e link).</p>
+      </div>
+      <div class="tabpane" id="tab-ig">
+        <div class="ig-embed">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+          <div>
+            <p style="font-family:var(--display);font-weight:600;color:var(--text);font-size:17px;margin-bottom:6px">Últimas publicações do @sbmp</p>
+            <p style="font-size:14px;max-width:44ch">Aqui aparece o feed ao vivo do Instagram da sociedade. Depende de conectar a conta profissional da SBMP no Meta Business.</p>
+          </div>
+          <button class="btn btn-ghost" onclick="window.open('https://instagram.com','_blank')">Ver no Instagram</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <img src="logo.png" alt="SBMP">
+      <p>Sociedade Brasileira de Medicina Personalizada. Associação médica científica de âmbito nacional, sem fins lucrativos.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Navegação</h4>
+      <a onclick="go('inicio')">Início</a>
+      <a onclick="quem()">Quem somos</a>
+      <a onclick="go('diretoria')">Diretoria</a>
+      <a onclick="go('associados')">Associados</a>
+      <a onclick="go('artigos')">Artigos científicos</a>
+      <a onclick="go('imprensa')">Imprensa</a>
+    </div>
+    <div class="foot-col">
+      <h4>Contato</h4>
+      <p>(11) 98119-2827</p>
+      <p style="cursor:text">Rua Helena, nº 285 — Ed. Royal Park, Cj. 71, 7º andar · São Paulo/SP</p>
+      <p style="cursor:text">contato@sbmp.com.br</p>
+      <a onclick="assoc()" style="color:var(--gold)">Associe-se →</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Sociedade Brasileira de Medicina Personalizada · Todos os direitos reservados.</span>
+    <span>Política de Privacidade</span>
+  </div>
+</footer>
+
+<script>
+const ASSOCIAR_URL = "associar/";
+function assoc(){ window.open(ASSOCIAR_URL,'_blank'); }
+
+/* ---- roteador de páginas (menu persiste) ---- */
+const pages=['inicio','diretoria','associados','artigos','imprensa'];
+function go(p){
+  pages.forEach(x=>document.getElementById('p-'+x).classList.toggle('on',x===p));
+  document.querySelectorAll('#desknav button[data-p],#mobnav button[data-p]').forEach(b=>
+    b.classList.toggle('active',b.dataset.p===p));
+  window.scrollTo({top:0,behavior:'instant'});
+  closeMob();
+  try{history.replaceState(null,'','#'+p);}catch(e){}
+}
+document.querySelectorAll('button[data-p]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.p)));
+
+/* ---- mobile nav ---- */
+function quem(){ go('inicio'); closeMob(); setTimeout(()=>document.getElementById('sec-quem').scrollIntoView({behavior:'smooth'}),60); }
+function toggleMob(){document.getElementById('mobnav').classList.toggle('on')}
+function closeMob(){document.getElementById('mobnav').classList.remove('on')}
+
+/* ---- nav scrolled ---- */
+addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>20));
+
+/* ---- diretoria ---- */
+const DIR=[
+  {n:"Dr. Walter Pace",r:"Presidente",b:"A SBMP é o elo entre a ciência e a prática clínica."},
+  {n:"Dr. Guilherme Renke",r:"Vice-Presidente",b:"Uma rede de oportunidades para transformar a vida dos pacientes."},
+  {n:"Caio Parente Barbosa",r:"Vice-Presidente",b:""},
+  {n:"Juliana Paola de Melhado",r:"Vice-Presidente",b:""},
+  {n:"Paulo Palma",r:"Vice-Presidente",b:""},
+  {n:"André Vinícius de Assis",r:"Vice-Presidente",b:""},
+  {n:"Ricardo Barone",r:"Secretário Geral",b:""},
+  {n:"Filippo Pedrinolla",r:"Primeiro Secretário",b:""},
+  {n:"Sang Choon Cha",r:"Segundo Secretário",b:""},
+  {n:"Cíntia Fonseca",r:"Tesoureira",b:""},
+  {n:"Dr. Lymark Komaroff",r:"Diretoria Jurídica",b:""},
+];
+const initials=n=>n.replace(/^(Dr|Dra)\.?\s+/,'').split(' ').filter(w=>w.length>2).slice(0,2).map(w=>w[0]).join('');
+document.getElementById('dirGrid').innerHTML=DIR.map(d=>`
+  <div class="dir-card">
+    <div class="dir-photo"><span class="mono">${initials(d.n)}</span></div>
+    <div class="dir-body">
+      <span class="role">${d.r}</span>
+      <h3>${d.n}</h3>
+      ${d.b?`<p class="bio">${d.b}</p>`:''}
+      <div class="dir-links">
+        <a title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+        <a title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.3 0-2.95-1.8-2.95s-2.08 1.4-2.08 2.85V21H9z"/></svg></a>
+        <a title="Currículo Lattes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></a>
+      </div>
+    </div>
+  </div>`).join('');
+
+/* ---- associados (exemplo) ---- */
+const ASSOC=[
+  ["Ana Beatriz Ramos","Endocrinologia","SP"],["Carlos Eduardo Nunes","Clínica Médica","RJ"],
+  ["Mariana Teixeira","Nutrologia","MG"],["Roberto Aguiar","Cardiologia","SP"],
+  ["Fernanda Lopes","Ginecologia","PR"],["Paulo Sérgio Vidal","Geriatria","RS"],
+  ["Juliana Castro","Dermatologia","SP"],["Marcos Antônio Reis","Endocrinologia","BA"],
+  ["Patrícia Gomes","Nutrologia","SC"],["Ricardo Salles","Clínica Médica","DF"],
+  ["Camila Andrade","Ginecologia","CE"],["Bruno Ferreira","Cardiologia","RJ"],
+  ["Larissa Monteiro","Nutrição","SP"],["Eduardo Braga","Geriatria","MG"],
+  ["Tatiana Rocha","Dermatologia","PE"],["Gustavo Pires","Endocrinologia","GO"],
+  ["Renata Vasconcelos","Clínica Médica","SP"],["Felipe Cardoso","Nutrologia","RJ"],
+];
+const esps=[...new Set(ASSOC.map(a=>a[1]))].sort();
+const ufs=[...new Set(ASSOC.map(a=>a[2]))].sort();
+document.getElementById('fEsp').innerHTML+=esps.map(e=>`<option>${e}</option>`).join('');
+document.getElementById('fUf').innerHTML+=ufs.map(u=>`<option>${u}</option>`).join('');
+function renderAssoc(){
+  const q=document.getElementById('assocSearch').value.toLowerCase();
+  const e=document.getElementById('fEsp').value, u=document.getElementById('fUf').value;
+  const rows=ASSOC.filter(a=>(!q||a[0].toLowerCase().includes(q))&&(!e||a[1]===e)&&(!u||a[2]===u))
+    .sort((a,b)=>a[0].localeCompare(b[0]));
+  document.getElementById('assocCount').innerHTML=`<b>${rows.length}</b> ${rows.length===1?'associado':'associados'}`;
+  document.getElementById('assocGrid').innerHTML=rows.map(a=>{
+    const ini=a[0].split(' ').filter(w=>w.length>2).slice(0,2).map(w=>w[0]).join('');
+    return `<div class="assoc-card"><div class="avatar">${ini}</div>
+      <div class="assoc-info"><span class="nm">${a[0]}</span><span class="sp">${a[1]}</span><span class="uf">${a[2]}</span></div>
+      <span class="badge-active">Ativo</span></div>`;
+  }).join('')||'<p style="color:var(--dim)">Nenhum associado encontrado.</p>';
+}
+renderAssoc();
+
+/* ---- artigos (exemplo) ---- */
+const ARTS=[
+  {t:"Terapia hormonal individualizada em mulheres na perimenopausa: uma revisão",a:"Renke G., Pace W. et al.",j:"J. Personalized Medicine",y:"2026"},
+  {t:"Medicina personalizada e prevenção de doenças crônicas: consenso brasileiro",a:"Palma P., Parente C. et al.",j:"J. Personalized Medicine",y:"2025"},
+  {t:"Biomarcadores no cuidado individualizado do paciente cardiometabólico",a:"Barone R., Assis A.V. et al.",j:"Rev. Bras. Med. Personalizada",y:"2025"},
+];
+document.getElementById('artList').innerHTML=ARTS.map(x=>`
+  <div class="art">
+    <div class="meta"><span class="jr">${x.j}</span><span>${x.y}</span></div>
+    <h3>${x.t}</h3>
+    <p class="auth">${x.a}</p>
+  </div>`).join('');
+
+/* ---- posicionamentos (reais, já publicados) ---- */
+const POS=[
+  ["7 mai 2026","Nota de Posicionamento Oficial da SBMP"],
+  ["27 mar 2026","Posicionamento sobre a autonomia médica e a segurança nas terapias individualizadas"],
+  ["22 jan 2026","Convocação — Assembleia Geral Extraordinária"],
+  ["12 dez 2025","Nota de esclarecimento sobre o uso de terapia com testosterona em mulheres"],
+  ["28 nov 2025","Em defesa da acessibilidade e da manipulação legal de medicamentos"],
+  ["13 nov 2025","Posicionamento oficial da SBMP — FDA"],
+  ["23 out 2025","Resposta oficial à reportagem sobre implantes hormonais (VEJA)"],
+  ["7 out 2025","Comunicado sobre o papel fundamental dos medicamentos manipulados na saúde"],
+  ["23 set 2025","Comunicado da SBMP — setembro"],
+];
+document.getElementById('posList').innerHTML=POS.map(p=>`
+  <a class="pos"><span class="date">${p[0]}</span><span class="ti">${p[1]}</span>
+    <span class="arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>`).join('');
+
+/* ---- mídia (exemplo) ---- */
+const MID=[
+  {v:"VEJA Saúde",t:"SBMP se posiciona sobre regulação de implantes hormonais",d:"Outubro 2025"},
+  {v:"CNN Brasil",t:"Entrevista: o futuro da medicina personalizada no país",d:"Agosto 2025"},
+  {v:"Portal Drauzio",t:"Medicina personalizada e prevenção: o que muda para o paciente",d:"Julho 2025"},
+];
+document.getElementById('midGrid').innerHTML=MID.map(m=>`
+  <a class="media"><span class="veic">${m.v}</span><h3>${m.t}</h3><span class="dt">${m.d}</span></a>`).join('');
+
+/* ---- tabs imprensa ---- */
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.tabpane').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); document.getElementById('tab-'+b.dataset.tab).classList.add('on');
+}));
+
+/* ---- deep link inicial ---- */
+try{const h=location.hash.replace('#','');if(pages.includes(h))go(h);}catch(e){}
+</script>

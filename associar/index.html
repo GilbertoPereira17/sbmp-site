@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Associe-se à SBMP — Sociedade Brasileira de Medicina Personalizada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ==========================================================================
+     SBMP — Formulário de associação  (tema dark, identidade do site sbmp.com.br)
+     Página única. Hospedar em sbmp.com.br/associar
+     CONFIG: ajuste WEBHOOK_URL no <script> lá embaixo antes de publicar.
+     ========================================================================== */
+  :root{
+    --gold:#FDBC00;           /* dourado principal SBMP */
+    --gold-bright:#FFA600;
+    --gold-deep:#B38214;
+    --ink:#f2f2f2;            /* texto claro sobre preto */
+    --muted:#9a968c;
+    --bg:#000000;
+    --card:#0d0d0d;
+    --field:#161616;
+    --line:#2c2a26;
+    --line-focus:var(--gold);
+    --error:#ff6b5e;
+    --ok:#37c98a;
+    --radius:14px;
+    --shadow:0 20px 60px rgba(0,0,0,.6);
+    --font:'Poppins',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    --font-head:'Sora','Poppins',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:var(--font);color:var(--ink);
+    background:radial-gradient(1200px 600px at 50% -10%, #1a1408 0%, #000 55%) no-repeat,var(--bg);
+    background-attachment:fixed;line-height:1.55;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:40px 20px 72px}
+  header.top{text-align:center;margin-bottom:30px}
+  header.top .logo{height:56px;width:auto;margin-bottom:20px;object-fit:contain}
+  header.top .kicker{color:var(--gold);font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;font-size:.7rem;margin-bottom:10px;font-family:var(--font-head)}
+  header.top h1{margin:0 0 10px;font-size:2rem;line-height:1.15;font-family:var(--font-head);
+    font-weight:800;letter-spacing:.01em}
+  header.top p{margin:0;color:var(--muted);font-size:.98rem}
+  .price-tag{display:inline-block;margin-top:16px;padding:8px 18px;border:1px solid var(--gold-deep);
+    border-radius:999px;color:var(--gold);font-family:var(--font-head);font-weight:700;font-size:.92rem;letter-spacing:.03em}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:30px}
+  fieldset{border:0;margin:0 0 8px;padding:0}
+  legend{font-weight:700;font-size:.82rem;color:var(--gold);text-transform:uppercase;letter-spacing:.14em;
+    font-family:var(--font-head);padding:22px 0 14px;border-bottom:1px solid var(--line);
+    width:100%;margin-bottom:18px}
+  fieldset:first-of-type legend{padding-top:0}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{margin-bottom:16px}
+  .field.col-2{grid-column:span 2}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}.field.col-2{grid-column:span 1}}
+  label{display:block;font-weight:500;font-size:.85rem;margin-bottom:7px;color:#e8e4da}
+  label .req{color:var(--gold);margin-left:2px}
+  .hint{display:block;font-weight:300;color:var(--muted);font-size:.77rem;margin-top:2px}
+  input,select,textarea{
+    width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;
+    font-size:.95rem;font-family:inherit;color:var(--ink);background:var(--field);
+    transition:border-color .15s,box-shadow .15s}
+  input::placeholder,textarea::placeholder{color:#6b675e}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23FDBC00' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
+  input:focus,select:focus,textarea:focus{
+    outline:none;border-color:var(--line-focus);box-shadow:0 0 0 3px rgba(253,188,0,.15)}
+  textarea{resize:vertical;min-height:72px}
+  input.invalid,select.invalid{border-color:var(--error)}
+  .err-msg{color:var(--error);font-size:.77rem;margin-top:5px;display:none}
+  .err-msg.show{display:block}
+  .doc-row{display:grid;grid-template-columns:130px 1fr 90px;gap:10px}
+  @media(max-width:560px){.doc-row{grid-template-columns:1fr 1fr}.doc-row .doc-num{grid-column:span 2}}
+  .submit{
+    width:100%;margin-top:14px;padding:16px;
+    background:linear-gradient(180deg,var(--gold) 0%,var(--gold-deep) 100%);color:#1a1200;border:0;
+    border-radius:12px;font-size:1.02rem;font-weight:700;font-family:var(--font-head);cursor:pointer;
+    letter-spacing:.02em;transition:filter .15s,transform .05s}
+  .submit:hover{filter:brightness(1.08)}
+  .submit:active{transform:translateY(1px)}
+  .submit:disabled{opacity:.55;cursor:not-allowed}
+  .consent{font-size:.82rem;color:var(--muted);margin:20px 0 4px;display:flex;gap:10px;align-items:flex-start}
+  .consent input{width:auto;margin-top:3px;flex-shrink:0;accent-color:var(--gold)}
+  .consent a{color:var(--gold)}
+  .form-note{font-size:.79rem;color:var(--muted);text-align:center;margin-top:18px}
+  /* estados de tela */
+  #screen-success,#screen-error{display:none;text-align:center;padding:28px 8px}
+  .badge{width:70px;height:70px;border-radius:50%;display:inline-flex;align-items:center;
+    justify-content:center;font-size:34px;margin-bottom:18px}
+  .badge.ok{background:rgba(55,201,138,.12);color:var(--ok);border:1px solid rgba(55,201,138,.35)}
+  .badge.no{background:rgba(255,107,94,.1);color:var(--error);border:1px solid rgba(255,107,94,.35)}
+  #screen-success h2,#screen-error h2{margin:0 0 12px;font-family:var(--font-head);font-weight:700}
+  #screen-success p,#screen-error p{color:var(--muted);margin:0 auto 8px;max-width:470px}
+  #screen-success strong{color:var(--gold)}
+  .retry{margin-top:18px;background:none;border:1px solid var(--gold-deep);color:var(--gold);
+    padding:11px 22px;border-radius:10px;font-weight:600;font-family:var(--font-head);cursor:pointer}
+  .spinner{display:none;width:16px;height:16px;border:2px solid rgba(26,18,0,.4);
+    border-top-color:#1a1200;border-radius:50%;animation:spin .7s linear infinite;
+    vertical-align:-2px;margin-right:8px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .cep-loading{font-size:.77rem;color:var(--gold);margin-top:5px;display:none}
+</style>
+</head>
+<body>
+
+<style>
+  .site-nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(0,0,0,.82);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .site-nav .inner{max-width:900px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:20px}
+  .site-nav img{height:34px;width:auto;cursor:pointer}
+  .site-nav nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+  .site-nav a{font-family:var(--font-head);font-weight:500;font-size:13px;letter-spacing:.02em;
+    text-transform:uppercase;color:var(--muted);padding:8px 12px;border-radius:7px;text-decoration:none;transition:.2s}
+  .site-nav a:hover{color:var(--ink)}
+  .site-nav a.cta{background:var(--gold);color:#1a1200;font-weight:700}
+  body{padding-top:60px}
+  @media(max-width:680px){.site-nav nav a:not(.cta){display:none}}
+</style>
+<header class="site-nav">
+  <div class="inner">
+    <a href="../"><img src="logo-sbmp.png" alt="SBMP"></a>
+    <nav>
+      <a href="../#inicio">Início</a>
+      <a href="../#diretoria">Diretoria</a>
+      <a href="../#associados">Associados</a>
+      <a href="../#artigos">Artigos</a>
+      <a href="../#imprensa">Imprensa</a>
+      <a class="cta" href="./">Associe-se</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <header class="top">
+    <img class="logo" src="logo-sbmp.png" alt="SBMP — Sociedade Brasileira de Medicina Personalizada">
+    <div class="kicker">Candidate-se a Membro</div>
+    <h1>Formulário de Associação</h1>
+    <p>Participe do avanço da medicina individualizada. Preencha seus dados para iniciar sua associação.</p>
+    <div class="price-tag">Anuidade R$ 497,00 / ano</div>
+  </header>
+
+  <div class="card">
+    <form id="assocForm" novalidate>
+
+      <fieldset>
+        <legend>Identificação</legend>
+        <div class="field">
+          <label for="nome">Nome completo<span class="req">*</span></label>
+          <input type="text" id="nome" name="nome" autocomplete="name" required>
+          <span class="err-msg" data-for="nome">Informe seu nome completo.</span>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label for="cpf">CPF<span class="req">*</span></label>
+            <input type="text" id="cpf" name="cpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14" required>
+            <span class="err-msg" data-for="cpf">CPF inválido.</span>
+          </div>
+          <div class="field">
+            <label for="email">E-mail<span class="req">*</span>
+              <span class="hint">Onde você receberá as comunicações da SBMP.</span>
+            </label>
+            <input type="email" id="email" name="email" autocomplete="email" placeholder="voce@exemplo.com" required>
+            <span class="err-msg" data-for="email">Informe um e-mail válido.</span>
+          </div>
+        </div>
+        <div class="field col-2">
+          <label for="profissao">Profissão<span class="req">*</span></label>
+          <select id="profissao" name="profissao" required>
+            <option value="">Selecione...</option>
+            <option>Médico(a)</option>
+            <option>Nutricionista</option>
+            <option>Enfermeiro(a)</option>
+            <option>Biomédico(a)</option>
+            <option>Farmacêutico(a)</option>
+            <option>Fisioterapeuta</option>
+            <option>Odontólogo(a)</option>
+            <option>Psicólogo(a)</option>
+            <option value="Outra">Outra</option>
+          </select>
+          <span class="err-msg" data-for="profissao">Selecione sua profissão.</span>
+        </div>
+        <div class="field col-2" id="tratamentoWrap" style="display:none">
+          <label for="tratamento">Como prefere ser tratado(a)?<span class="req">*</span></label>
+          <select id="tratamento" name="tratamento">
+            <option value="">Selecione...</option>
+            <option value="Doutor">Doutor</option>
+            <option value="Doutora">Doutora</option>
+          </select>
+          <span class="err-msg" data-for="tratamento">Selecione o tratamento.</span>
+        </div>
+        <div class="field col-2" id="profissaoOutraWrap" style="display:none">
+          <label for="profissaoOutra">Qual?</label>
+          <input type="text" id="profissaoOutra" name="profissaoOutra">
+        </div>
+        <div class="field col-2">
+          <label>Documento profissional<span class="req">*</span></label>
+          <div class="doc-row">
+            <select id="docTipo" name="docTipo" aria-label="Tipo de documento" required>
+              <option value="CRM">CRM</option>
+              <option value="CRN">CRN</option>
+              <option value="CRE">CRE</option>
+              <option value="Outro">Outro</option>
+            </select>
+            <input class="doc-num" type="text" id="docNumero" name="docNumero" inputmode="numeric" placeholder="Número do registro" required>
+            <select id="docUF" name="docUF" aria-label="UF do documento" required></select>
+          </div>
+          <span class="err-msg" data-for="docNumero">Informe o número e a UF do registro.</span>
+        </div>
+        <div class="field col-2">
+          <label for="especializacao">Especialização</label>
+          <input type="text" id="especializacao" name="especializacao" placeholder="Ex.: Endocrinologia, Nutrologia...">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Endereço</legend>
+        <div class="grid">
+          <div class="field">
+            <label for="cep">CEP<span class="req">*</span></label>
+            <input type="text" id="cep" name="cep" inputmode="numeric" placeholder="00000-000" maxlength="9" required>
+            <span class="cep-loading" id="cepLoading">Buscando endereço…</span>
+            <span class="err-msg" data-for="cep">CEP inválido.</span>
+          </div>
+          <div class="field">
+            <label for="cidade">Cidade<span class="req">*</span></label>
+            <input type="text" id="cidade" name="cidade" autocomplete="address-level2" required>
+            <span class="err-msg" data-for="cidade">Informe a cidade.</span>
+          </div>
+        </div>
+        <div class="field col-2">
+          <label for="logradouro">Logradouro<span class="req">*</span></label>
+          <input type="text" id="logradouro" name="logradouro" autocomplete="address-line1" placeholder="Rua, avenida..." required>
+          <span class="err-msg" data-for="logradouro">Informe o logradouro.</span>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label for="numero">Número<span class="req">*</span></label>
+            <input type="text" id="numero" name="numero" inputmode="numeric" required>
+            <span class="err-msg" data-for="numero">Informe o número.</span>
+          </div>
+          <div class="field">
+            <label for="complemento">Complemento</label>
+            <input type="text" id="complemento" name="complemento" placeholder="Sala, apto, bloco...">
+          </div>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label for="bairro">Bairro<span class="req">*</span></label>
+            <input type="text" id="bairro" name="bairro" autocomplete="address-level3" required>
+            <span class="err-msg" data-for="bairro">Informe o bairro.</span>
+          </div>
+          <div class="field">
+            <label for="uf">UF<span class="req">*</span></label>
+            <select id="uf" name="uf" required></select>
+            <span class="err-msg" data-for="uf">Selecione a UF.</span>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Contato</legend>
+        <div class="grid">
+          <div class="field">
+            <label for="celular">Celular / WhatsApp<span class="req">*</span>
+              <span class="hint">Seu melhor contato.</span>
+            </label>
+            <input type="text" id="celular" name="celular" inputmode="numeric" placeholder="(00) 00000-0000" maxlength="15" required>
+            <span class="err-msg" data-for="celular">Informe um celular válido com DDD (11 dígitos, ex: 11 91234-5678).</span>
+          </div>
+          <div class="field">
+            <label for="instagram">Instagram</label>
+            <input type="text" id="instagram" name="instagram" placeholder="@seuperfil">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Sobre você e a SBMP</legend>
+        <div class="field col-2">
+          <label for="comoConheceu">Como conheceu a SBMP?</label>
+          <select id="comoConheceu" name="comoConheceu">
+            <option value="">Selecione...</option>
+            <option>Instagram</option>
+            <option>Evento / Congresso</option>
+            <option>Indicação</option>
+            <option>Google</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="field col-2" id="comoOutroWrap" style="display:none">
+          <label for="comoConheceuOutro">Qual?</label>
+          <input type="text" id="comoConheceuOutro" name="comoConheceuOutro">
+        </div>
+        <div class="field col-2">
+          <label for="atendeOnde">Atende onde?
+            <span class="hint">Clínica ou instituição de saúde onde você atende.</span>
+          </label>
+          <input type="text" id="atendeOnde" name="atendeOnde">
+        </div>
+        <div class="field col-2">
+          <label for="clubeBeneficios">Gostaria de sugerir sua empresa/marca/curso ao Clube de Benefícios da SBMP?</label>
+          <textarea id="clubeBeneficios" name="clubeBeneficios" placeholder="Se sim, conte um pouco (opcional)."></textarea>
+        </div>
+        <div class="field col-2">
+          <label for="comissao">Gostaria de contribuir em alguma comissão da SBMP?</label>
+          <select id="comissao" name="comissao">
+            <option value="">Selecione...</option>
+            <option>Comunicação</option>
+            <option>Científica</option>
+            <option>Novas Lideranças</option>
+            <option value="Não tenho interesse">Não tenho interesse</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <label class="consent">
+        <input type="checkbox" id="consent" required>
+        <span>Autorizo a SBMP a utilizar meus dados para fins de associação e comunicação, conforme a LGPD. Estou ciente de que a associação está sujeita à validação das informações.</span>
+      </label>
+      <span class="err-msg" data-for="consent" style="margin-bottom:8px">É necessário concordar para prosseguir.</span>
+
+      <button type="submit" class="submit" id="submitBtn">
+        <span class="spinner" id="spinner"></span>
+        <span id="submitLabel">Enviar solicitação de associação</span>
+      </button>
+      <p class="form-note">Após o envio, você receberá um e-mail de confirmação e as instruções de pagamento da anuidade.</p>
+    </form>
+
+    <div id="screen-success">
+      <div class="badge ok">✓</div>
+      <h2>Solicitação recebida!</h2>
+      <p>Enviamos um e-mail para <strong id="okEmail"></strong> com os próximos passos, incluindo o link para o pagamento da anuidade.</p>
+      <p>Sua associação passará por uma validação das informações (registro profissional, situação no conselho de ética e confirmação do pagamento).</p>
+    </div>
+
+    <div id="screen-error">
+      <div class="badge no">!</div>
+      <h2>Não foi possível enviar</h2>
+      <p>Houve uma falha ao registrar sua solicitação. Verifique sua conexão e tente novamente.</p>
+      <button class="retry" id="retryBtn">Tentar novamente</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================ CONFIG ============================ */
+// Cole aqui a URL do webhook de produção do n8n antes de publicar:
+const WEBHOOK_URL = "https://n8n.triusbot.site/webhook/sbmp-associacao";
+/* =============================================================== */
+
+const UFS = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
+(function fillUF(){
+  const opts = '<option value="">UF</option>'+UFS.map(u=>`<option>${u}</option>`).join('');
+  document.getElementById('uf').innerHTML = opts;
+  document.getElementById('docUF').innerHTML = opts;
+})();
+
+const $ = id => document.getElementById(id);
+const digits = s => (s||'').replace(/\D/g,'');
+
+/* ---------- máscaras ---------- */
+$('cpf').addEventListener('input', e=>{
+  let v = digits(e.target.value).slice(0,11);
+  v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  e.target.value = v;
+});
+$('celular').addEventListener('input', e=>{
+  let v = digits(e.target.value).slice(0,11);
+  if(v.length>10) v = v.replace(/(\d{2})(\d{5})(\d{1,4})/,'($1) $2-$3');
+  else if(v.length>6) v = v.replace(/(\d{2})(\d{4})(\d{1,4})/,'($1) $2-$3');
+  else if(v.length>2) v = v.replace(/(\d{2})(\d{1,5})/,'($1) $2');
+  else if(v.length>0) v = v.replace(/(\d{1,2})/,'($1');
+  e.target.value = v;
+});
+$('cep').addEventListener('input', e=>{
+  let v = digits(e.target.value).slice(0,8);
+  if(v.length>5) v = v.replace(/(\d{5})(\d{1,3})/,'$1-$2');
+  e.target.value = v;
+});
+$('instagram').addEventListener('blur', e=>{
+  let v = e.target.value.trim();
+  if(v && !v.startsWith('@')) e.target.value = '@'+v.replace(/^@+/,'');
+});
+
+/* ---------- validação de CPF (dígito verificador) ---------- */
+function cpfValido(cpf){
+  const d = digits(cpf);
+  if(d.length!==11 || /^(\d)\1{10}$/.test(d)) return false;
+  const dv = base => { let s=0; for(let i=0;i<base.length;i++) s += +base[i]*(base.length+1-i); let r=(s*10)%11; return r===10?0:r; };
+  const d1 = dv(d.slice(0,9));
+  const d2 = dv(d.slice(0,9)+d1);
+  return d1=== +d[9] && d2=== +d[10];
+}
+
+/* ---------- busca de CEP (ViaCEP) ---------- */
+$('cep').addEventListener('blur', async e=>{
+  const d = digits(e.target.value);
+  if(d.length!==8) return;
+  $('cepLoading').style.display='block';
+  try{
+    const r = await fetch(`https://viacep.com.br/ws/${d}/json/`);
+    const j = await r.json();
+    if(!j.erro){
+      if(j.logradouro) $('logradouro').value = j.logradouro;
+      if(j.bairro) $('bairro').value = j.bairro;
+      if(j.localidade) $('cidade').value = j.localidade;
+      if(j.uf) $('uf').value = j.uf;
+      $('numero').focus();
+    }
+  }catch(_){ /* silencioso: usuário pode preencher à mão */ }
+  finally{ $('cepLoading').style.display='none'; }
+});
+
+/* ---------- campo condicional "Como conheceu > Outro" ---------- */
+$('profissao').addEventListener('change', e=>{
+  $('profissaoOutraWrap').style.display = e.target.value==='Outra' ? 'block' : 'none';
+  $('tratamentoWrap').style.display = e.target.value==='Médico(a)' ? 'block' : 'none';
+  if(e.target.value!=='Médico(a)') $('tratamento').value='';
+});
+
+$('comoConheceu').addEventListener('change', e=>{
+  $('comoOutroWrap').style.display = e.target.value==='Outro' ? 'block' : 'none';
+});
+
+/* ---------- validação de campo ---------- */
+function setErr(id, show){
+  const el = $(id);
+  if(el) el.classList.toggle('invalid', show);
+  const msg = document.querySelector(`.err-msg[data-for="${id}"]`);
+  if(msg) msg.classList.toggle('show', show);
+}
+function validar(){
+  let ok = true;
+  const obrig = ['nome','cpf','email','profissao','docNumero','docUF','cep','logradouro','numero','bairro','cidade','uf','celular'];
+  obrig.forEach(id=>{
+    const v = $(id).value.trim();
+    let bad = !v;
+    if(id==='cpf') bad = !cpfValido(v);
+    if(id==='email') bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    if(id==='celular') bad = !/^\d{2}9\d{8}$/.test(digits(v));
+    if(id==='cep') bad = digits(v).length !== 8;
+    setErr(id, bad);
+    if(bad) ok = false;
+  });
+  if($('profissao').value==='Médico(a)' && !$('tratamento').value){
+    setErr('tratamento', true); ok = false;
+  } else { setErr('tratamento', false); }
+
+  const consent = $('consent').checked;
+  document.querySelector('.err-msg[data-for="consent"]').classList.toggle('show', !consent);
+  if(!consent) ok = false;
+  return ok;
+}
+
+/* ---------- envio ---------- */
+$('assocForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  if(!validar()){
+    const first = document.querySelector('.invalid, .err-msg.show');
+    if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  const btn = $('submitBtn');
+  btn.disabled = true; $('spinner').style.display='inline-block'; $('submitLabel').textContent='Enviando...';
+
+  const payload = {
+    nome: $('nome').value.trim(),
+    cpf: digits($('cpf').value),
+    profissao: $('profissao').value==='Outra' ? ($('profissaoOutra').value.trim()||'Outra') : $('profissao').value,
+    tratamento: $('tratamento').value,
+    docTipo: $('docTipo').value,
+    docNumero: $('docNumero').value.trim(),
+    docUF: $('docUF').value,
+    especializacao: $('especializacao').value.trim(),
+    cep: digits($('cep').value),
+    logradouro: $('logradouro').value.trim(),
+    numero: $('numero').value.trim(),
+    complemento: $('complemento').value.trim(),
+    bairro: $('bairro').value.trim(),
+    cidade: $('cidade').value.trim(),
+    uf: $('uf').value,
+    celular: digits($('celular').value),
+    email: $('email').value.trim().toLowerCase(),
+    instagram: $('instagram').value.trim(),
+    comoConheceu: $('comoConheceu').value==='Outro' ? ($('comoConheceuOutro').value.trim()||'Outro') : $('comoConheceu').value,
+    atendeOnde: $('atendeOnde').value.trim(),
+    clubeBeneficios: $('clubeBeneficios').value.trim(),
+    comissao: $('comissao').value,
+    origem: 'formulario-site',
+    enviadoEm: new Date().toISOString()
+  };
+
+  try{
+    const r = await fetch(WEBHOOK_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    $('okEmail').textContent = payload.email;
+    $('assocForm').style.display='none';
+    $('screen-success').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }catch(err){
+    $('assocForm').style.display='none';
+    $('screen-error').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+});
+
+$('retryBtn').addEventListener('click', ()=>{
+  $('screen-error').style.display='none';
+  $('assocForm').style.display='block';
+  const btn=$('submitBtn'); btn.disabled=false; $('spinner').style.display='none'; $('submitLabel').textContent='Enviar solicitação de associação';
+});
+</script>
+</body>
+</html>
