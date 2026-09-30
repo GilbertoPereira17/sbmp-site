@@ -67,51 +67,54 @@ section{padding-block:clamp(56px,9vw,104px)}
 .section-head p{color:var(--muted)}
 
 /* ---------- HERO ---------- */
-.hero{position:relative;min-height:clamp(560px,82vh,760px);display:flex;align-items:center;
-  border-bottom:1px solid var(--line-soft);overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0}
-.hero-bg::before{content:"";position:absolute;inset:0;
+.hero{position:relative;min-height:clamp(560px,82vh,760px);border-bottom:1px solid var(--line-soft);overflow:hidden}
+.hero-track{position:absolute;inset:0}
+/* cada slide ocupa a hero inteira e faz fade */
+.slide{position:absolute;inset:0;display:flex;align-items:center;opacity:0;visibility:hidden;
+  transition:opacity .8s ease, visibility .8s;pointer-events:none}
+.slide.on{opacity:1;visibility:visible;pointer-events:auto}
+.slide-bg{position:absolute;inset:0;z-index:0}
+.slide-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.32}
+.slide-bg::after{content:"";position:absolute;inset:0;
   background:
-    radial-gradient(120% 90% at 78% 30%, #3a2f14 0%, transparent 55%),
-    radial-gradient(90% 80% at 18% 80%, #241d10 0%, transparent 60%),
-    linear-gradient(180deg,#0A0A0A 0%, #100E0A 100%)}
-.hero-glow{position:absolute;width:520px;height:520px;right:-60px;top:8%;border-radius:50%;
-  background:radial-gradient(circle, #D9A93A22 0%, transparent 70%);filter:blur(30px)}
-.hero-in{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding-inline:var(--gut);width:100%;
-  display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,5vw,64px);align-items:center}
-.hero-copy{min-width:0}
-.hero-in .eyebrow{opacity:0;animation:rise .7s .05s forwards}
+    radial-gradient(120% 90% at 80% 25%, #3a2f1466 0%, transparent 55%),
+    linear-gradient(90deg,#0A0A0A 30%, #0a0a0acc 55%, #0a0a0a55 100%),
+    linear-gradient(180deg,#0A0A0A00 40%, #0A0A0A 100%)}
+.slide-in{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding-inline:var(--gut);width:100%}
+.slide-in .cont{max-width:620px}
+.slide.on .slide-in .anim{opacity:0;transform:translateY(16px);animation:rise .7s forwards}
+.slide.on .slide-in .a1{animation-delay:.1s}
+.slide.on .slide-in .a2{animation-delay:.22s}
+.slide.on .slide-in .a3{animation-delay:.34s}
+.slide-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.slide-tag.news::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.slide h1{font-size:clamp(34px,6.2vw,70px);font-weight:800;letter-spacing:-.03em;margin:18px 0 0;line-height:1.04}
+.slide h1 span{display:block;color:var(--gold)}
+.slide h2{font-size:clamp(28px,4.8vw,52px);font-weight:800;letter-spacing:-.02em;margin:16px 0 0;line-height:1.1;
+  color:var(--text);max-width:16ch}
+.slide .date{margin-top:14px;font-family:var(--display);font-size:13px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted)}
+.slide .lede{margin-top:22px;max-width:52ch;font-size:clamp(15px,1.9vw,18px);color:var(--muted);line-height:1.6}
+.slide .acts{margin-top:34px;display:flex;flex-wrap:wrap;gap:14px}
 
-/* card de notícia */
-.news-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);
-  border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;
-  box-shadow:0 30px 70px rgba(0,0,0,.45);opacity:0;transform:translateY(16px);
-  animation:rise .8s .4s forwards;transition:transform .3s,border-color .3s,box-shadow .3s}
-.news-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 36px 80px rgba(0,0,0,.55)}
-.news-media{position:relative;aspect-ratio:16/9;background:
-  radial-gradient(120% 120% at 80% 10%, #5a4a1f 0%, transparent 55%),
-  linear-gradient(150deg,#231d12,#15130f);display:flex;align-items:flex-start;padding:16px}
-.news-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.news-chip{position:relative;z-index:1;font-family:var(--display);font-weight:700;font-size:11px;
-  letter-spacing:.1em;text-transform:uppercase;color:#1A1405;background:var(--gold);
-  border-radius:999px;padding:5px 13px}
-.news-body{padding:22px 24px 24px;display:grid;gap:10px}
-.news-date{font-family:var(--display);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
-.news-title{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.28;color:var(--text)}
-.news-resumo{font-size:14px;color:var(--muted);line-height:1.55;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.news-more{display:inline-flex;align-items:center;gap:7px;margin-top:4px;
-  font-family:var(--display);font-weight:600;font-size:14px;color:var(--gold)}
-.news-card:hover .news-more{gap:11px}
-.hero h1{font-size:clamp(38px,7vw,78px);font-weight:800;letter-spacing:-.03em;margin:20px 0 0;
-  line-height:1.02;opacity:0;animation:rise .7s .15s forwards}
-.hero h1 span{display:block;color:var(--gold)}
-.hero .lede{margin-top:26px;max-width:52ch;font-size:clamp(16px,2vw,19px);color:var(--muted);
-  opacity:0;animation:rise .7s .3s forwards}
-.hero-actions{margin-top:38px;display:flex;flex-wrap:wrap;gap:14px;opacity:0;animation:rise .7s .45s forwards}
+/* setas e bolinhas */
+.hero-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:46px;height:46px;
+  border-radius:50%;background:rgba(20,18,14,.6);border:1px solid var(--line);color:var(--text);
+  display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px);transition:.2s;opacity:.7}
+.hero-arrow:hover{opacity:1;border-color:var(--gold);color:var(--gold)}
+.hero-arrow svg{width:22px;height:22px}
+.hero-arrow.prev{left:clamp(12px,3vw,32px)}
+.hero-arrow.next{right:clamp(12px,3vw,32px)}
+.hero-dots{position:absolute;bottom:26px;left:0;right:0;z-index:5;display:flex;gap:10px;justify-content:center}
+.hero-dots button{width:34px;height:4px;border-radius:99px;border:0;background:#ffffff33;cursor:pointer;
+  padding:0;transition:background .3s,width .3s}
+.hero-dots button.on{background:var(--gold);width:48px}
+@media (max-width:860px){
+  .hero-arrow{display:none}
+  .slide-bg::after{background:linear-gradient(180deg,#0A0A0Acc 0%, #0A0A0A 90%)}
+}
 @keyframes rise{to{opacity:1;transform:none}}
-.hero-actions{transform:translateY(14px)}
-.hero h1,.hero .lede,.hero-in .eyebrow{transform:translateY(14px)}
 
 .btn{font-family:var(--display);font-weight:600;font-size:15px;padding:15px 30px;border-radius:10px;
   cursor:pointer;border:1px solid transparent;transition:transform .15s,background .2s,border-color .2s;
@@ -275,8 +278,6 @@ footer{background:var(--ink-2);border-top:1px solid var(--line);padding-block:52
 @media (max-width:860px){
   .nav-links{display:none}
   .burger{display:block}
-  .hero-in{grid-template-columns:1fr;gap:36px}
-  .news-card{max-width:440px}
   .about{grid-template-columns:1fr;gap:32px}
   .join-grid{grid-template-columns:1fr;gap:28px}
   .price-card{position:static}
@@ -316,33 +317,15 @@ footer{background:var(--ink-2);border-top:1px solid var(--line);padding-block:52
 
 <!-- ===== INÍCIO ===== -->
 <div class="page on" id="p-inicio">
-  <section class="hero">
-    <div class="hero-bg"><div class="hero-glow"></div></div>
-    <div class="hero-in">
-      <div class="hero-copy">
-        <span class="eyebrow">Sociedade Brasileira de Medicina Personalizada</span>
-        <h1>A medicina personalizada <span>começa em você.</span></h1>
-        <p class="lede">Uma associação médica científica de âmbito nacional, que reúne médicos e profissionais da saúde comprometidos com o cuidado individualizado ao paciente e a prevenção de doenças crônicas.</p>
-        <div class="hero-actions">
-          <button class="btn btn-gold" onclick="assoc()">Candidate-se a membro</button>
-          <button class="btn btn-ghost" onclick="go('diretoria')">Conheça a diretoria</button>
-        </div>
-      </div>
-
-      <a class="news-card" id="newsCard">
-        <div class="news-media" id="newsMedia">
-          <span class="news-chip">Última notícia</span>
-        </div>
-        <div class="news-body">
-          <span class="news-date" id="newsDate"></span>
-          <h3 class="news-title" id="newsTitle">Carregando novidades…</h3>
-          <p class="news-resumo" id="newsResumo"></p>
-          <span class="news-more">Ler notícia
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
-        </div>
-      </a>
-    </div>
+  <section class="hero" id="hero">
+    <div class="hero-track" id="heroTrack"></div>
+    <button class="hero-arrow prev" id="heroPrev" aria-label="Anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <button class="hero-arrow next" id="heroNext" aria-label="Próximo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <div class="hero-dots" id="heroDots"></div>
   </section>
 
   <section class="pillars">
@@ -545,26 +528,72 @@ footer{background:var(--ink-2);border-top:1px solid var(--line);padding-block:52
 const ASSOCIAR_URL = "associar/";
 function assoc(){ window.open(ASSOCIAR_URL,'_blank'); }
 
-/* ---- card de notícia da hero (virá do banco/painel) ---- */
-const NEWS = {
-  titulo:"SBMP no FDA: leia o posicionamento oficial da sociedade",
-  resumo:"A sociedade publicou seu posicionamento oficial sobre a atuação junto ao FDA e a segurança nas terapias individualizadas.",
-  data:"7 mai 2026", link:"#imprensa", imagem:"", ativo:true
-};
-function renderNews(){
-  const card=document.getElementById('newsCard');
-  if(!NEWS||!NEWS.ativo||!NEWS.titulo){ card.style.display='none'; return; }
-  card.style.display='';
-  document.getElementById('newsTitle').textContent=NEWS.titulo;
-  document.getElementById('newsResumo').textContent=NEWS.resumo||'';
-  document.getElementById('newsDate').textContent=NEWS.data||'';
-  const media=document.getElementById('newsMedia');
-  const old=media.querySelector('img'); if(old) old.remove();
-  if(NEWS.imagem){ const im=document.createElement('img'); im.src=NEWS.imagem; im.alt=NEWS.titulo; media.appendChild(im); }
-  card.setAttribute('href', NEWS.link||'#');
-  card.onclick = (NEWS.link||'').startsWith('#imprensa') ? (e=>{e.preventDefault();go('imprensa');}) : null;
+/* ====================== CARROSSEL DA HERO ======================
+   Slide 1 = institucional (fixo). Demais = notícias (do painel/banco).
+   Troca sozinho, com setas e bolinhas. */
+const esc0=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let NOTICIAS = [
+  { titulo:"SBMP no FDA: leia o posicionamento oficial da sociedade",
+    resumo:"A sociedade publicou seu posicionamento oficial sobre a atuação junto ao FDA e a segurança nas terapias individualizadas.",
+    data:"7 mai 2026", link:"#imprensa", imagem:"" },
+  { titulo:"Em defesa da manipulação legal de medicamentos",
+    resumo:"Comunicado da SBMP sobre o papel fundamental dos medicamentos manipulados na saúde e o acesso do paciente.",
+    data:"28 nov 2025", link:"#imprensa", imagem:"" },
+];
+let heroIdx=0, heroTimer=null;
+function slideInstit(){
+  return `<div class="slide" data-i="0">
+    <div class="slide-bg"></div>
+    <div class="slide-in"><div class="cont">
+      <span class="slide-tag anim a1">Sociedade Brasileira de Medicina Personalizada</span>
+      <h1 class="anim a1">A medicina personalizada <span>começa em você.</span></h1>
+      <p class="lede anim a2">Uma associação médica científica de âmbito nacional, que reúne médicos e profissionais da saúde comprometidos com o cuidado individualizado ao paciente e a prevenção de doenças crônicas.</p>
+      <div class="acts anim a3">
+        <button class="btn btn-gold" onclick="assoc()">Candidate-se a membro</button>
+        <button class="btn btn-ghost" onclick="go('diretoria')">Conheça a diretoria</button>
+      </div>
+    </div></div>
+  </div>`;
 }
-renderNews();
+function slideNews(n,i){
+  const goImpr = (n.link||'').startsWith('#imprensa');
+  const onclick = goImpr ? `go('imprensa')` : `window.open('${esc0(n.link||'#')}','_blank')`;
+  return `<div class="slide" data-i="${i}">
+    <div class="slide-bg">${n.imagem?`<img src="${esc0(n.imagem)}" alt="">`:''}</div>
+    <div class="slide-in"><div class="cont">
+      <span class="slide-tag news anim a1">Notícia</span>
+      ${n.data?`<span class="date anim a1">${esc0(n.data)}</span>`:''}
+      <h2 class="anim a2">${esc0(n.titulo)}</h2>
+      ${n.resumo?`<p class="lede anim a2">${esc0(n.resumo)}</p>`:''}
+      <div class="acts anim a3"><button class="btn btn-gold" onclick="${onclick}">Ler notícia</button></div>
+    </div></div>
+  </div>`;
+}
+function buildHero(){
+  const track=document.getElementById('heroTrack'), dots=document.getElementById('heroDots');
+  const slides=[slideInstit(), ...NOTICIAS.map((n,i)=>slideNews(n,i+1))];
+  track.innerHTML=slides.join('');
+  dots.innerHTML=slides.map((_,i)=>`<button data-d="${i}" aria-label="Slide ${i+1}"></button>`).join('');
+  dots.querySelectorAll('button').forEach(b=>b.onclick=()=>{goSlide(+b.dataset.d);restart();});
+  heroIdx=0; showSlide(0); restart();
+}
+function showSlide(i){
+  const track=document.getElementById('heroTrack');
+  const slides=track.querySelectorAll('.slide'); if(!slides.length) return;
+  heroIdx=(i+slides.length)%slides.length;
+  slides.forEach((s,k)=>s.classList.toggle('on',k===heroIdx));
+  document.querySelectorAll('#heroDots button').forEach((d,k)=>d.classList.toggle('on',k===heroIdx));
+}
+function goSlide(i){ showSlide(i); }
+function nextSlide(){ showSlide(heroIdx+1); }
+function prevSlide(){ showSlide(heroIdx-1); }
+function restart(){ clearInterval(heroTimer); heroTimer=setInterval(nextSlide,6500); }
+document.getElementById('heroNext').onclick=()=>{nextSlide();restart();};
+document.getElementById('heroPrev').onclick=()=>{prevSlide();restart();};
+const heroEl=document.getElementById('hero');
+heroEl.addEventListener('mouseenter',()=>clearInterval(heroTimer));
+heroEl.addEventListener('mouseleave',restart);
+buildHero();
 
 /* ---- roteador de páginas (menu persiste) ---- */
 const pages=['inicio','diretoria','associados','artigos','imprensa'];
@@ -728,12 +757,13 @@ async function getJSON(path){ const r=await fetch(API_BASE+path,{credentials:'om
 
 async function hydrate(){
   if(API_BASE===null) return;                 // sem backend: fica no mock
-  // card de notícia
-  try{ const b=await getJSON('/api/site/banner');
-    if(b){ NEWS.titulo=b.titulo; NEWS.resumo=b.resumo||''; NEWS.data=fmtData(b.data_pub);
-      NEWS.imagem=b.imagem_url||''; NEWS.link=b.link_externo||'#imprensa'; NEWS.ativo=true; }
-    else { NEWS.ativo=false; }
-    renderNews();
+  // carrossel de notícias da hero
+  try{ const ns=await getJSON('/api/noticias');
+    if(Array.isArray(ns)&&ns.length){
+      NOTICIAS = ns.slice(0,6).map(n=>({ titulo:n.titulo, resumo:n.resumo||'',
+        data:fmtData(n.data_pub), link:n.link_externo||'#imprensa', imagem:n.imagem_url||'' }));
+      buildHero();
+    }
   }catch(e){}
   // diretoria
   try{ const d=await getJSON('/api/diretoria');
