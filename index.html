@@ -532,13 +532,12 @@ function assoc(){ window.open(ASSOCIAR_URL,'_blank'); }
    Slide 1 = institucional (fixo). Demais = notícias (do painel/banco).
    Troca sozinho, com setas e bolinhas. */
 const esc0=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let NOTICIAS = [
-  { titulo:"SBMP no FDA: leia o posicionamento oficial da sociedade",
-    resumo:"A sociedade publicou seu posicionamento oficial sobre a atuação junto ao FDA e a segurança nas terapias individualizadas.",
-    data:"7 mai 2026", link:"#imprensa", imagem:"" },
-  { titulo:"Em defesa da manipulação legal de medicamentos",
-    resumo:"Comunicado da SBMP sobre o papel fundamental dos medicamentos manipulados na saúde e o acesso do paciente.",
-    data:"28 nov 2025", link:"#imprensa", imagem:"" },
+let DESTAQUES = [
+  { rotulo:"Evento", titulo:"Simpósio SBMP 2027", texto:"Presencial em 30 de janeiro de 2027. Encontro nacional de medicina personalizada com a comunidade de associados.",
+    botao:"Saiba mais", link:"#imprensa", imagem:"" },
+  { rotulo:"Comunicado", titulo:"SBMP no FDA: posicionamento oficial",
+    texto:"A sociedade publicou seu posicionamento oficial sobre a atuação junto ao FDA e a segurança nas terapias individualizadas.",
+    botao:"Ler posicionamento", link:"#imprensa", imagem:"" },
 ];
 let heroIdx=0, heroTimer=null;
 function slideInstit(){
@@ -555,23 +554,25 @@ function slideInstit(){
     </div></div>
   </div>`;
 }
-function slideNews(n,i){
-  const goImpr = (n.link||'').startsWith('#imprensa');
-  const onclick = goImpr ? `go('imprensa')` : `window.open('${esc0(n.link||'#')}','_blank')`;
+function slideInfo(n,i){
+  const goInt = (n.link||'').startsWith('#');
+  const rota = goInt ? (n.link.replace('#','')||'inicio') : '';
+  const onclick = goInt ? `go('${esc0(rota)}')` : `window.open('${esc0(n.link||'#')}','_blank')`;
+  const temBotao = n.botao && n.link;
   return `<div class="slide" data-i="${i}">
     <div class="slide-bg">${n.imagem?`<img src="${esc0(n.imagem)}" alt="">`:''}</div>
     <div class="slide-in"><div class="cont">
-      <span class="slide-tag news anim a1">Notícia</span>
+      ${n.rotulo?`<span class="slide-tag news anim a1">${esc0(n.rotulo)}</span>`:''}
       ${n.data?`<span class="date anim a1">${esc0(n.data)}</span>`:''}
       <h2 class="anim a2">${esc0(n.titulo)}</h2>
-      ${n.resumo?`<p class="lede anim a2">${esc0(n.resumo)}</p>`:''}
-      <div class="acts anim a3"><button class="btn btn-gold" onclick="${onclick}">Ler notícia</button></div>
+      ${n.texto?`<p class="lede anim a2">${esc0(n.texto)}</p>`:''}
+      ${temBotao?`<div class="acts anim a3"><button class="btn btn-gold" onclick="${onclick}">${esc0(n.botao)}</button></div>`:''}
     </div></div>
   </div>`;
 }
 function buildHero(){
   const track=document.getElementById('heroTrack'), dots=document.getElementById('heroDots');
-  const slides=[slideInstit(), ...NOTICIAS.map((n,i)=>slideNews(n,i+1))];
+  const slides=[slideInstit(), ...DESTAQUES.map((n,i)=>slideInfo(n,i+1))];
   track.innerHTML=slides.join('');
   dots.innerHTML=slides.map((_,i)=>`<button data-d="${i}" aria-label="Slide ${i+1}"></button>`).join('');
   dots.querySelectorAll('button').forEach(b=>b.onclick=()=>{goSlide(+b.dataset.d);restart();});
@@ -757,11 +758,11 @@ async function getJSON(path){ const r=await fetch(API_BASE+path,{credentials:'om
 
 async function hydrate(){
   if(API_BASE===null) return;                 // sem backend: fica no mock
-  // carrossel de notícias da hero
-  try{ const ns=await getJSON('/api/noticias');
+  // carrossel de destaques/informativos da hero
+  try{ const ns=await getJSON('/api/destaques');
     if(Array.isArray(ns)&&ns.length){
-      NOTICIAS = ns.slice(0,6).map(n=>({ titulo:n.titulo, resumo:n.resumo||'',
-        data:fmtData(n.data_pub), link:n.link_externo||'#imprensa', imagem:n.imagem_url||'' }));
+      DESTAQUES = ns.slice(0,8).map(n=>({ rotulo:n.rotulo||'', titulo:n.titulo, texto:n.texto||'',
+        botao:n.botao_texto||'', link:n.botao_link||'', imagem:n.imagem_url||'' }));
       buildHero();
     }
   }catch(e){}
