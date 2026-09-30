@@ -78,6 +78,15 @@ section{padding-block:clamp(56px,9vw,104px)}
 .hero-glow{position:absolute;width:520px;height:520px;right:-60px;top:8%;border-radius:50%;
   background:radial-gradient(circle, #D9A93A22 0%, transparent 70%);filter:blur(30px)}
 .hero-in{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding-inline:var(--gut);width:100%}
+.news-banner{display:inline-flex;align-items:center;gap:12px;max-width:100%;
+  background:rgba(217,169,58,.1);border:1px solid rgba(217,169,58,.4);border-radius:999px;
+  padding:8px 8px 8px 8px;margin-bottom:24px;cursor:pointer;text-decoration:none;
+  opacity:0;animation:rise .7s 0s forwards;transition:border-color .2s,background .2s}
+.news-banner:hover{border-color:var(--gold);background:rgba(217,169,58,.16)}
+.news-tag{flex-shrink:0;font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:#1A1405;background:var(--gold);border-radius:999px;padding:4px 12px}
+.news-txt{font-size:13.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(60vw,520px)}
+.news-arrow{flex-shrink:0;color:var(--gold);display:flex;padding-right:6px}
 .hero-in .eyebrow{opacity:0;animation:rise .7s .05s forwards}
 .hero h1{font-size:clamp(38px,7vw,78px);font-weight:800;letter-spacing:-.03em;margin:20px 0 0;
   line-height:1.02;opacity:0;animation:rise .7s .15s forwards}
@@ -293,6 +302,11 @@ footer{background:var(--ink-2);border-top:1px solid var(--line);padding-block:52
   <section class="hero">
     <div class="hero-bg"><div class="hero-glow"></div></div>
     <div class="hero-in">
+      <a class="news-banner" id="newsBanner">
+        <span class="news-tag">Notícia</span>
+        <span class="news-txt" id="newsTxt">Carregando novidades…</span>
+        <span class="news-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
       <span class="eyebrow">Sociedade Brasileira de Medicina Personalizada</span>
       <h1>A medicina personalizada <span>começa em você.</span></h1>
       <p class="lede">Uma associação médica científica de âmbito nacional, que reúne médicos e profissionais da saúde comprometidos com o cuidado individualizado ao paciente e a prevenção de doenças crônicas.</p>
@@ -502,6 +516,16 @@ footer{background:var(--ink-2);border-top:1px solid var(--line);padding-block:52
 <script>
 const ASSOCIAR_URL = "associar/";
 function assoc(){ window.open(ASSOCIAR_URL,'_blank'); }
+
+/* ---- banner de notícia da hero (virá do banco/painel) ---- */
+const NEWS = { texto:"SBMP no FDA: leia o posicionamento oficial da sociedade", link:"#imprensa", ativo:true };
+(function(){
+  const b=document.getElementById('newsBanner');
+  if(!NEWS||!NEWS.ativo||!NEWS.texto){ b.style.display='none'; return; }
+  document.getElementById('newsTxt').textContent=NEWS.texto;
+  b.setAttribute('href', NEWS.link||'#');
+  if((NEWS.link||'').startsWith('#imprensa')){ b.addEventListener('click',e=>{e.preventDefault();go('imprensa');}); }
+})();
 
 /* ---- roteador de páginas (menu persiste) ---- */
 const pages=['inicio','diretoria','associados','artigos','imprensa'];
