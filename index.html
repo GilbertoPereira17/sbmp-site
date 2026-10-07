@@ -438,7 +438,7 @@ window.SBMP_API = "https://api.sbmp.com.br";</script>
       </div>
       <div class="assoc-count" id="assocCount"></div>
       <div class="assoc-grid" id="assocGrid"></div>
-      <p class="note"><b>Dados de exemplo.</b> Na versão final, esta lista é gerada automaticamente a partir da base unificada de associados — apenas quem está com a associação ativa, exibindo somente nome, especialidade e estado. CPF, e-mail e telefone nunca aparecem no site.</p>
+      <p class="note">Esta lista é gerada automaticamente a partir da base de associados ativos — exibindo somente nome, especialidade e estado. CPF, e-mail e telefone nunca aparecem no site.</p>
     </div>
   </section>
 </div>
@@ -459,7 +459,7 @@ window.SBMP_API = "https://api.sbmp.com.br";</script>
         <p>A SBMP orgulha-se da parceria para publicação de diretrizes e consensos no JPM, revista internacional indexada, revisada por pares e de acesso aberto, publicada mensalmente pela MDPI. Membros da SBMP têm <strong style="color:var(--gold);font-weight:500">15% de desconto</strong> nas taxas de publicação de submissões aprovadas.</p>
         <div><button class="btn btn-ghost" onclick="window.open('https://www.mdpi.com/journal/jpm','_blank')">Quero saber mais</button></div>
       </div>
-      <p class="note"><b>Dados de exemplo.</b> Os artigos serão cadastrados por vocês numa planilha simples (título, autores, revista, ano e link) e aparecem aqui automaticamente.</p>
+      <p class="note">Os artigos são cadastrados pela SBMP no painel e aparecem aqui automaticamente.</p>
     </div>
   </section>
 </div>
@@ -481,7 +481,7 @@ window.SBMP_API = "https://api.sbmp.com.br";</script>
       <div class="tabpane on" id="tab-pos"><div class="pos-list" id="posList"></div></div>
       <div class="tabpane" id="tab-mid">
         <div class="media-grid" id="midGrid"></div>
-        <p class="note"><b>Dados de exemplo.</b> Matérias e entrevistas são cadastradas por vocês (veículo, título, data e link).</p>
+        <p class="note">Matérias e entrevistas são cadastradas pela SBMP no painel.</p>
       </div>
       <div class="tabpane" id="tab-ig">
         <div class="ig-embed">
@@ -654,17 +654,7 @@ function renderDir(){
 renderDir();
 
 /* ---- associados (exemplo) ---- */
-let ASSOC=[
-  ["Ana Beatriz Ramos","Endocrinologia","SP"],["Carlos Eduardo Nunes","Clínica Médica","RJ"],
-  ["Mariana Teixeira","Nutrologia","MG"],["Roberto Aguiar","Cardiologia","SP"],
-  ["Fernanda Lopes","Ginecologia","PR"],["Paulo Sérgio Vidal","Geriatria","RS"],
-  ["Juliana Castro","Dermatologia","SP"],["Marcos Antônio Reis","Endocrinologia","BA"],
-  ["Patrícia Gomes","Nutrologia","SC"],["Ricardo Salles","Clínica Médica","DF"],
-  ["Camila Andrade","Ginecologia","CE"],["Bruno Ferreira","Cardiologia","RJ"],
-  ["Larissa Monteiro","Nutrição","SP"],["Eduardo Braga","Geriatria","MG"],
-  ["Tatiana Rocha","Dermatologia","PE"],["Gustavo Pires","Endocrinologia","GO"],
-  ["Renata Vasconcelos","Clínica Médica","SP"],["Felipe Cardoso","Nutrologia","RJ"],
-];
+let ASSOC=[];
 function buildAssocFilters(){
   const esps=[...new Set(ASSOC.map(a=>a[1]).filter(Boolean))].sort();
   const ufs=[...new Set(ASSOC.map(a=>a[2]).filter(Boolean))].sort();
@@ -688,12 +678,9 @@ function renderAssoc(){
 renderAssoc();
 
 /* ---- artigos (exemplo) ---- */
-let ARTS=[
-  {t:"Terapia hormonal individualizada em mulheres na perimenopausa: uma revisão",a:"Renke G., Pace W. et al.",j:"J. Personalized Medicine",y:"2026"},
-  {t:"Medicina personalizada e prevenção de doenças crônicas: consenso brasileiro",a:"Palma P., Parente C. et al.",j:"J. Personalized Medicine",y:"2025"},
-  {t:"Biomarcadores no cuidado individualizado do paciente cardiometabólico",a:"Barone R., Assis A.V. et al.",j:"Rev. Bras. Med. Personalizada",y:"2025"},
-];
+let ARTS=[];
 function renderArts(){
+  if(!ARTS.length){ document.getElementById('artList').innerHTML='<p style="color:var(--dim)">Nenhum artigo publicado ainda.</p>'; return; }
   document.getElementById('artList').innerHTML=ARTS.map(x=>`
   <div class="art">
     <div class="meta"><span class="jr">${x.j||''}</span><span>${x.y||''}</span></div>
@@ -725,12 +712,9 @@ function renderPos(){
 renderPos();
 
 /* ---- mídia (exemplo) ---- */
-let MID=[
-  {v:"VEJA Saúde",t:"SBMP se posiciona sobre regulação de implantes hormonais",d:"Outubro 2025"},
-  {v:"CNN Brasil",t:"Entrevista: o futuro da medicina personalizada no país",d:"Agosto 2025"},
-  {v:"Portal Drauzio",t:"Medicina personalizada e prevenção: o que muda para o paciente",d:"Julho 2025"},
-];
+let MID=[];
 function renderMid(){
+  if(!MID.length){ document.getElementById('midGrid').innerHTML='<p style="color:var(--dim)">Nenhuma matéria publicada ainda.</p>'; return; }
   document.getElementById('midGrid').innerHTML=MID.map(m=>{
     const href=m.link?` href="${m.link}" target="_blank" rel="noopener"`:'';
     return `<a class="media"${href}><span class="veic">${m.v}</span><h3>${m.t}</h3><span class="dt">${m.d}</span></a>`;
@@ -789,7 +773,7 @@ async function hydrate(){
   }catch(e){}
   // artigos
   try{ const a=await getJSON('/api/artigos');
-    if(Array.isArray(a)&&a.length){ ARTS=a.map(x=>({t:x.titulo,a:x.autores,j:x.revista,y:x.ano,link:x.link})); renderArts(); }
+    if(Array.isArray(a)){ ARTS=a.map(x=>({t:x.titulo,a:x.autores,j:x.revista,y:x.ano,link:x.link})); renderArts(); }
   }catch(e){}
   // posicionamentos
   try{ const p=await getJSON('/api/posicionamentos');
@@ -797,7 +781,7 @@ async function hydrate(){
   }catch(e){}
   // mídia
   try{ const m=await getJSON('/api/midia');
-    if(Array.isArray(m)&&m.length){ MID=m.map(x=>({v:x.veiculo,t:x.titulo,d:fmtData(x.data_pub),link:x.link})); renderMid(); }
+    if(Array.isArray(m)){ MID=m.map(x=>({v:x.veiculo,t:x.titulo,d:fmtData(x.data_pub),link:x.link})); renderMid(); }
   }catch(e){}
 }
 hydrate();
