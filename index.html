@@ -249,7 +249,10 @@ select.filter:focus{outline:none;border-color:var(--gold)}
 .pos .ti{font-size:14.5px;flex:1}
 .pos .arrow{color:var(--dim)}
 .media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-.media{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:22px;display:grid;gap:10px}
+.media{background:var(--surface);border:1px solid var(--line);border-radius:13px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s}
+.media-img{aspect-ratio:16/9;background:var(--ink-2);overflow:hidden}
+.media-img img{width:100%;height:100%;object-fit:cover}
+.media-body{padding:20px;display:grid;gap:9px}
 .media .veic{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
 .media h3{font-size:15.5px;font-weight:600;line-height:1.35}
 .media .dt{font-size:12.5px;color:var(--dim)}
@@ -717,7 +720,8 @@ function renderMid(){
   if(!MID.length){ document.getElementById('midGrid').innerHTML='<p style="color:var(--dim)">Nenhuma matéria publicada ainda.</p>'; return; }
   document.getElementById('midGrid').innerHTML=MID.map(m=>{
     const href=m.link?` href="${m.link}" target="_blank" rel="noopener"`:'';
-    return `<a class="media"${href}><span class="veic">${m.v}</span><h3>${m.t}</h3><span class="dt">${m.d}</span></a>`;
+    const img=m.imagem?`<div class="media-img"><img src="${m.imagem}" alt="" loading="lazy"></div>`:'';
+    return `<a class="media"${href}>${img}<div class="media-body"><span class="veic">${m.v}</span><h3>${m.t}</h3><span class="dt">${m.d}</span></div></a>`;
   }).join('');
 }
 renderMid();
@@ -781,7 +785,7 @@ async function hydrate(){
   }catch(e){}
   // mídia
   try{ const m=await getJSON('/api/midia');
-    if(Array.isArray(m)){ MID=m.map(x=>({v:x.veiculo,t:x.titulo,d:fmtData(x.data_pub),link:x.link})); renderMid(); }
+    if(Array.isArray(m)){ MID=m.map(x=>({v:x.veiculo,t:x.titulo,d:fmtData(x.data_pub),link:x.link,imagem:x.imagem_url})); renderMid(); }
   }catch(e){}
 }
 hydrate();
